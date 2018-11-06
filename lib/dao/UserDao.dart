@@ -59,4 +59,6 @@ class UserDao {
     return new BaseModel(statusCode: code,statusMsg: statusMsg,data: homevoList);
   }
 
+
+
 }
