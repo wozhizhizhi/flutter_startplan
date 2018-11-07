@@ -18,20 +18,21 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  # Your other regular dependencies here
+  json_annotation: ^2.0.0
   cupertino_icons: ^0.1.2
   dio: ^1.0.6
   connectivity: ^0.3.2
   shared_preferences: ^0.4.3
   fluttertoast: ^2.0.9
   banner_view: ^1.1.2
-  json_serializable: ^2.0.0
   flutter_plugin:
     path: ../flutter_plugin #获取设备信息插件
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
+
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
 
@@ -52,6 +53,7 @@ flutter:
   # assets begin
   # images/*
     - images/2.0x/home_img_bg.png
+    - images/2.0x/me_img_bg.png
     - images/app_guide_1.png
     - images/app_guide_2.png
     - images/app_guide_3.png
@@ -59,7 +61,13 @@ flutter:
     - images/btn_back_yellow.png
     - images/cc_book_no.png
     - images/defaul_head_parent.png
+    - images/header.png
     - images/home_img_bg.png
+    - images/icon_01.png
+    - images/icon_02.png
+    - images/icon_03.png
+    - images/icon_04.png
+    - images/icon_05.png
     - images/icon_add.png
     - images/img_capabilitytraining.png
     - images/img_login_pwd.png
@@ -73,7 +81,10 @@ flutter:
     - images/img_tab_userinfo_normal.png
     - images/img_themereading.png
     - images/launch.png
+    - images/loading.gif
     - images/login_logo.png
+    - images/me_icon_arrowgary.png
+    - images/me_img_bg.png
     - images/rp_thunder.png
   # assets end
 

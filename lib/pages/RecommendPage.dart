@@ -1,8 +1,12 @@
+import 'package:banner_view/banner_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_starforparents/util/PhoneSizeUtil.dart';
+import 'package:flutter_starforparents/dao/UserDao.dart';
+import 'package:flutter_starforparents/modle/BaseModel.dart';
+import 'package:flutter_starforparents/modle/BookListVos.dart';
 import 'package:flutter_starforparents/r.dart';
 import 'package:flutter_starforparents/util/StudentColors.dart';
-import 'package:banner_view/banner_view.dart';
+import 'package:flutter_starforparents/widgets/commonloading.dart';
+import 'package:flutter/cupertino.dart';
 
 class RecommendPage extends StatefulWidget {
   @override
@@ -11,32 +15,75 @@ class RecommendPage extends StatefulWidget {
 
 class _RecommendPageState extends State<RecommendPage>
     with AutomaticKeepAliveClientMixin {
-  int count = 3;
+  final int count = 3;
   @override
   bool get wantKeepAlive => true;
+  BaseModel<BookListVos> bookLists;
+
+  /// 请求图书的列表逻辑
+  Future<void> _getBookData() async {
+    if (!mounted) return; //异步处理，防止报错
+    bookLists = await UserDao.getBookData();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getBookData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          margin: const EdgeInsets.only(right: 10.0, left: 10.0),
-          child: GridView.builder(
+    var content;
+    if (bookLists.data.bookListVoArr == null){
+      content = new CommonLoading();
+    }
+    else{
+      content = CustomScrollView(
+        slivers: <Widget>[
+          new CupertinoSliverRefreshControl(onRefresh: (){
+            _getBookData();
+            setState(() {
+              
+            });
+          },),
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                mainAxisSpacing: 0.0,
+                crossAxisSpacing: 0.0,
+                childAspectRatio: 2.0),
+            delegate:
+            SliverChildBuilderDelegate((BuildContext context, int index) {
+              return _bannerWeight();
+            }, childCount: 1),
+          ),
+
+          SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: count,
                 mainAxisSpacing: 5.0,
                 crossAxisSpacing: 5.0,
-                childAspectRatio: 0.56),
-            itemBuilder: (context, index) {
-              return _buildItem(index);
-            },
-            itemCount: 19,
-          )),
+                childAspectRatio: 0.60),
+            delegate:
+            SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(child:_buildItem(index),margin: const EdgeInsets.only(left: 10.0,right: 10.0),);
+            }, childCount: bookLists.data.bookListVoArr.length),
+          ),
+        ],
+      );
+    }
+    return CupertinoPageScaffold(
+      child: content,
     );
   }
 
   /// 广告
   Widget _bannerWeight() {
     return new Container(
+      margin: const EdgeInsets.only(bottom: 22.0),
       height: 170.0,
       child: new BannerView(
         [
@@ -94,8 +141,8 @@ class _RecommendPageState extends State<RecommendPage>
                   BoxShadow(color: StudentColors.s_9a9a9a, blurRadius: 0.1)
                 ],
               ),
-              child: Image.asset(
-                R.imagesCcBookNoPng,
+              child: Image.network(
+                bookLists.data.bookListVoArr[index].coverUrl,
                 fit: BoxFit.fill,
                 width: 103.0,
                 height: 137.0,
@@ -105,7 +152,7 @@ class _RecommendPageState extends State<RecommendPage>
           Container(
             margin: const EdgeInsets.only(top: 7.0),
             child: Text(
-              "大家丛书：梦想与火箭一同起飞-梁...",
+              bookLists.data.bookListVoArr[index].name,
               style: TextStyle(fontSize: 12.0, color: StudentColors.s_484848),
               softWrap: true,
               maxLines: 2,
@@ -123,7 +170,7 @@ class _RecommendPageState extends State<RecommendPage>
                   height: 15.0,
                 ),
                 Text(
-                  "x2",
+                  "x${bookLists.data.bookListVoArr[index].difficultyIndex}",
                   style:
                       TextStyle(fontSize: 14.0, color: StudentColors.s_22b2e1),
                 )

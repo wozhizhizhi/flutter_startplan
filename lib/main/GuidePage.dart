@@ -6,6 +6,7 @@ import 'package:flutter_starforparents/dao/UserDao.dart';
 import 'package:flutter_starforparents/modle/HomeVoArrElement.dart';
 import 'package:flutter_starforparents/modle/BaseModel.dart';
 import 'dart:async';
+import 'package:flutter_starforparents/widgets/commonloading.dart';
 
 /// 指导页面
 class GuidePage extends StatefulWidget {
@@ -48,11 +49,11 @@ class _GuidePageState extends State<GuidePage> {
     /// 页面会呈现报错状态 “data was null”，还有一种方法是在组件里面判断null，
     /// 如果是空可以给一个默认值
     if (model == null) {
-      content = Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.yellow),
-        ),
-      );
+      content = new CommonLoading();
+//        CircularProgressIndicator(
+//          valueColor: AlwaysStoppedAnimation(Colors.yellow),
+//        ),
+
     } else {
       content = SingleChildScrollView(
         child: Container(

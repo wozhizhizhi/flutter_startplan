@@ -10,6 +10,7 @@ import 'package:flutter_starforparents/modle/HomeVoArrElement.dart';
 import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:flutter_starforparents/modle/BookListVos.dart';
 import 'dart:io';
 
 class UserDao {
@@ -59,6 +60,18 @@ class UserDao {
     return new BaseModel(statusCode: code,statusMsg: statusMsg,data: homevoList);
   }
 
+  /// 获取推荐图书的数据
+  static Future<BaseModel<BookListVos>> getBookData() async{
+    BookListVos bookListVos;
+    String statusMsg;
+    int code;
+    var res = await HttpMannage.netFetch(Address.URL_INTEREST_LIBRARY_LISTS, null, null, new Options(method: "get"));
 
-
+    if (res != null && res.data != null){
+      bookListVos = BookListVos.fromJson(res.data);
+    }
+    statusMsg = res.data["statusMsg"];
+    code = res.data["statusCode"];
+    return new BaseModel(statusCode: code,statusMsg: statusMsg,data: bookListVos);
+  }
 }
