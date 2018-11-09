@@ -26,6 +26,8 @@ dependencies:
   shared_preferences: ^0.4.3
   fluttertoast: ^2.0.9
   banner_view: ^1.1.2
+  permission_handler: '^2.1.0'
+  cached_network_image: ^0.5.0
   flutter_plugin:
     path: ../flutter_plugin #获取设备信息插件
 
@@ -53,7 +55,9 @@ flutter:
   # assets begin
   # images/*
     - images/2.0x/home_img_bg.png
+    - images/2.0x/launch.png
     - images/2.0x/me_img_bg.png
+    - images/3.0x/launch.png
     - images/app_guide_1.png
     - images/app_guide_2.png
     - images/app_guide_3.png
@@ -62,6 +66,7 @@ flutter:
     - images/cc_book_no.png
     - images/defaul_head_parent.png
     - images/header.png
+    - images/highlight_icon.png
     - images/home_img_bg.png
     - images/icon_01.png
     - images/icon_02.png
@@ -69,7 +74,9 @@ flutter:
     - images/icon_04.png
     - images/icon_05.png
     - images/icon_add.png
+    - images/icon_adress.png
     - images/img_capabilitytraining.png
+    - images/img_info_setting.png
     - images/img_login_pwd.png
     - images/img_login_user.png
     - images/img_readingReport.png
@@ -80,11 +87,14 @@ flutter:
     - images/img_tab_userinfo.png
     - images/img_tab_userinfo_normal.png
     - images/img_themereading.png
+    - images/img_userinfo_camera.png
+    - images/img_userinfo_jump.png
     - images/launch.png
     - images/loading.gif
     - images/login_logo.png
     - images/me_icon_arrowgary.png
     - images/me_img_bg.png
+    - images/read_ask_tag.png
     - images/rp_thunder.png
   # assets end
 

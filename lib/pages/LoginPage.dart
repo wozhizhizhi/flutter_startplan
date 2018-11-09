@@ -9,6 +9,8 @@ import 'package:flutter_starforparents/util/LocalSharePreferences.dart';
 import 'package:flutter_starforparents/net/Config.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_starforparents/util/PhoneSizeUtil.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -41,14 +43,14 @@ class _LoginPageState extends State<LoginPage> {
   void isNameandPwdTuer() async {
     String name = await LocalSharePreferences.get(Config.USER_NAME_KEY);
     String pwd = await LocalSharePreferences.get(Config.PW_KEY);
-      if (name.isNotEmpty && pwd.isNotEmpty) {
-        /// 这两种方法都可以目前我没有发现区别
+    if (name.isNotEmpty && pwd.isNotEmpty) {
+      /// 这两种方法都可以目前我没有发现区别
 //      _textEditingNameController.value = TextEditingValue(text: name);
 //      _textEditingpwdController.value = TextEditingValue(text: pwd);
 
-        _textEditingNameController.text = name;
-        _textEditingpwdController.text = pwd;
-      }
+      _textEditingNameController.text = name;
+      _textEditingpwdController.text = pwd;
+    }
   }
 
   /// 清空密码和用户名输入框目前用不到
@@ -63,31 +65,43 @@ class _LoginPageState extends State<LoginPage> {
     BaseModel<LoginVo> model = await UserDao.getLogin(account, realPassword);
     if (model.data.token != null && model.data.token != "") {
       Navigator.pushReplacementNamed(context, "/HomePage");
-    }
-    else{
+    } else {
       /// 弹出登录不成功的提示
-      Fluttertoast.showToast(msg: model.statusMsg,gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+          msg: model.statusMsg, gravity: ToastGravity.CENTER);
     }
+  }
+
+  void requestPermission(PermissionGroup permission) async {
+    final List<PermissionGroup> permissions = <PermissionGroup>[permission];
+    final Map<PermissionGroup, PermissionStatus> permissionRequestResult =
+        await PermissionHandler().requestPermissions(permissions);
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    requestPermission(PermissionGroup.phone);
     return Scaffold(
 //        resizeToAvoidBottomPadding: true, //输入框抵住键盘
-      body:new GestureDetector(
-          onTap: (){
+      body: new GestureDetector(
+          onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },
-          child: ListView(
-        padding: const EdgeInsets.only(top: 0.0,bottom: 0.0),children: <Widget>[
-        Container(
-          width: PhoneSizeUtil.getScreenWidth(context),
-          height: PhoneSizeUtil.getScreenHeight(context),
-          color: StudentColors.s_186acc,
-          child: _buildLogin(),
-        ),
-      ],)
-    ),);
+          child: ListView(physics: AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
+            children: <Widget>[
+              Container(
+                width: PhoneSizeUtil.getScreenWidth(context),
+                height: PhoneSizeUtil.getScreenHeight(context),
+                color: StudentColors.s_186acc,
+                child: _buildLogin(),
+              ),
+
+            ],
+          )),
+    );
   }
 
   /// 登录的界面
@@ -189,11 +203,10 @@ class _LoginPageState extends State<LoginPage> {
                 _getLoginData(_textEditingNameController.text,
                     _textEditingpwdController.text);
                 print("token is a : ${HttpMannage.getToken().toString()}");
-              }
-              else {
+              } else {
                 Fluttertoast.showToast(
                     msg: "请输入账号或密码!", toastLength: Toast.LENGTH_SHORT);
-                }
+              }
             },
             child: Text(
               "登录",
@@ -202,25 +215,27 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
 
-        /// 登录按钮
-        GestureDetector(
-          child: Container(
-            margin: const EdgeInsets.only(top: 104.0),
-            width: 240.0,
-            height: 45.0,
-            child: OutlineButton(
-              shape: StadiumBorder(),
-              onPressed: null,
-              borderSide: BorderSide(width: 1.5),
-              child: Text(
-                "出来报到 ? 注册戳这里",
-                style: TextStyle(fontSize: 16.0, color: Colors.white),
+        Expanded(
+          child: GestureDetector(
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              margin: const EdgeInsets.only(bottom: 10.0),
+              width: 240.0,
+              height: 45.0,
+              child: OutlineButton(
+                shape: StadiumBorder(),
+                onPressed: null,
+                borderSide: BorderSide(width: 1.5),
+                child: Text(
+                  "出来报到 ? 注册戳这里",
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                ),
               ),
             ),
+            onTap: () {
+              Navigator.pushNamed(context, "/RegisteredPage");
+            },
           ),
-          onTap: () {
-            Navigator.pushNamed(context, "/RegisteredPage");
-          },
         ),
       ],
     );

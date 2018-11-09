@@ -15,6 +15,7 @@ class _UserPageState extends State<UserPage> {
       body: Container(
         color: StudentColors.s_f6f6f6,
         child: ListView(
+          physics: AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             Container(
               width: PhoneSizeUtil.getScreenWidth(context),
@@ -26,16 +27,43 @@ class _UserPageState extends State<UserPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Container(
-                    decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(50.0),
-                      border: new Border.all(color: Colors.white, width: 2.5),
+                 InkWell(child: Container(
+                    margin: const EdgeInsets.only(right: 13.0, top: 13.0),
+                    child: Image.asset(
+                      R.imagesImgInfoSettingPng,
+                      width: 30.0,
+                      height: 30.0,
                     ),
-                    width: 96.0,
-                    height: 96.0,
-                    child: new CircleAvatar(
-                      backgroundImage: new AssetImage(R.imagesHeaderPng),
-                    ),
+                    alignment: Alignment.topRight,
+                  ),onTap: (){
+                   Navigator.pushNamed(context, "/SettingPage");
+                 },),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      new Container(
+                        decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.circular(50.0),
+                          border:
+                              new Border.all(color: Colors.white, width: 2.5),
+                        ),
+                        width: 96.0,
+                        height: 96.0,
+                        child: new CircleAvatar(
+                          backgroundImage: new AssetImage(R.imagesHeaderPng),
+                        ),
+                      ),
+                      Container(
+                        width: 96.0,
+                        height: 96.0,
+                        child: Image.asset(
+                          R.imagesImgUserinfoCameraPng,
+                          width: 30.0,
+                          height: 30.0,
+                        ),
+                        alignment: Alignment.bottomRight,
+                      ),
+                    ],
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 13.0),
@@ -61,7 +89,8 @@ class _UserPageState extends State<UserPage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
-              margin: const EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
+              margin: const EdgeInsets.only(
+                  top: 15.0, left: 10.0, right: 10.0, bottom: 10.0),
               child: Column(
                 children: <Widget>[
                   ListTile(

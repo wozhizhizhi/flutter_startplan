@@ -1,8 +1,12 @@
 class R {
   /// ![](http://127.0.0.1:2227/images/2.0x/home_img_bg.png)
   static final String images20xHomeImgBgPng = 'images/2.0x/home_img_bg.png';
+  /// ![](http://127.0.0.1:2227/images/2.0x/launch.png)
+  static final String images20xLaunchPng = 'images/2.0x/launch.png';
   /// ![](http://127.0.0.1:2227/images/2.0x/me_img_bg.png)
   static final String images20xMeImgBgPng = 'images/2.0x/me_img_bg.png';
+  /// ![](http://127.0.0.1:2227/images/3.0x/launch.png)
+  static final String images30xLaunchPng = 'images/3.0x/launch.png';
   /// ![](http://127.0.0.1:2227/images/app_guide_1.png)
   static final String imagesAppGuide1Png = 'images/app_guide_1.png';
   /// ![](http://127.0.0.1:2227/images/app_guide_2.png)
@@ -19,6 +23,8 @@ class R {
   static final String imagesDefaulHeadParentPng = 'images/defaul_head_parent.png';
   /// ![](http://127.0.0.1:2227/images/header.png)
   static final String imagesHeaderPng = 'images/header.png';
+  /// ![](http://127.0.0.1:2227/images/highlight_icon.png)
+  static final String imagesHighlightIconPng = 'images/highlight_icon.png';
   /// ![](http://127.0.0.1:2227/images/home_img_bg.png)
   static final String imagesHomeImgBgPng = 'images/home_img_bg.png';
   /// ![](http://127.0.0.1:2227/images/icon_01.png)
@@ -33,8 +39,12 @@ class R {
   static final String imagesIcon05Png = 'images/icon_05.png';
   /// ![](http://127.0.0.1:2227/images/icon_add.png)
   static final String imagesIconAddPng = 'images/icon_add.png';
+  /// ![](http://127.0.0.1:2227/images/icon_adress.png)
+  static final String imagesIconAdressPng = 'images/icon_adress.png';
   /// ![](http://127.0.0.1:2227/images/img_capabilitytraining.png)
   static final String imagesImgCapabilitytrainingPng = 'images/img_capabilitytraining.png';
+  /// ![](http://127.0.0.1:2227/images/img_info_setting.png)
+  static final String imagesImgInfoSettingPng = 'images/img_info_setting.png';
   /// ![](http://127.0.0.1:2227/images/img_login_pwd.png)
   static final String imagesImgLoginPwdPng = 'images/img_login_pwd.png';
   /// ![](http://127.0.0.1:2227/images/img_login_user.png)
@@ -55,6 +65,10 @@ class R {
   static final String imagesImgTabUserinfoNormalPng = 'images/img_tab_userinfo_normal.png';
   /// ![](http://127.0.0.1:2227/images/img_themereading.png)
   static final String imagesImgThemereadingPng = 'images/img_themereading.png';
+  /// ![](http://127.0.0.1:2227/images/img_userinfo_camera.png)
+  static final String imagesImgUserinfoCameraPng = 'images/img_userinfo_camera.png';
+  /// ![](http://127.0.0.1:2227/images/img_userinfo_jump.png)
+  static final String imagesImgUserinfoJumpPng = 'images/img_userinfo_jump.png';
   /// ![](http://127.0.0.1:2227/images/launch.png)
   static final String imagesLaunchPng = 'images/launch.png';
   /// ![](http://127.0.0.1:2227/images/loading.gif)
@@ -65,6 +79,8 @@ class R {
   static final String imagesMeIconArrowgaryPng = 'images/me_icon_arrowgary.png';
   /// ![](http://127.0.0.1:2227/images/me_img_bg.png)
   static final String imagesMeImgBgPng = 'images/me_img_bg.png';
+  /// ![](http://127.0.0.1:2227/images/read_ask_tag.png)
+  static final String imagesReadAskTagPng = 'images/read_ask_tag.png';
   /// ![](http://127.0.0.1:2227/images/rp_thunder.png)
   static final String imagesRpThunderPng = 'images/rp_thunder.png';
 }

@@ -18,4 +18,9 @@ class LocalSharePreferences{
     return prefs.remove(key);
   }
 
+  static cleanAll() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.clear();
+  }
+
 }

@@ -7,7 +7,10 @@ import 'package:flutter_starforparents/r.dart';
 import 'package:flutter_starforparents/util/StudentColors.dart';
 import 'package:flutter_starforparents/widgets/commonloading.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_starforparents/widgets/PhotoHero.dart';
+import 'package:flutter_starforparents/pages/BookDetailPage.dart';
 
+/// 推荐页面
 class RecommendPage extends StatefulWidget {
   @override
   _RecommendPageState createState() => _RecommendPageState();
@@ -37,18 +40,11 @@ class _RecommendPageState extends State<RecommendPage>
   @override
   Widget build(BuildContext context) {
     var content;
-    if (bookLists.data.bookListVoArr == null){
+    if (bookLists == null) {
       content = new CommonLoading();
-    }
-    else{
-      content = CustomScrollView(
+    } else {
+      content = Container(child: CustomScrollView(
         slivers: <Widget>[
-          new CupertinoSliverRefreshControl(onRefresh: (){
-            _getBookData();
-            setState(() {
-              
-            });
-          },),
           SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
@@ -56,27 +52,32 @@ class _RecommendPageState extends State<RecommendPage>
                 crossAxisSpacing: 0.0,
                 childAspectRatio: 2.0),
             delegate:
-            SliverChildBuilderDelegate((BuildContext context, int index) {
+                SliverChildBuilderDelegate((BuildContext context, int index) {
               return _bannerWeight();
             }, childCount: 1),
           ),
-
           SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: count,
-                mainAxisSpacing: 5.0,
+                mainAxisSpacing: 8.0,
                 crossAxisSpacing: 5.0,
-                childAspectRatio: 0.60),
+                childAspectRatio: 0.59),
             delegate:
-            SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Container(child:_buildItem(index),margin: const EdgeInsets.only(left: 10.0,right: 10.0),);
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                child: _buildItem(index),
+                margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+              );
             }, childCount: bookLists.data.bookListVoArr.length),
           ),
         ],
-      );
+      ),);
     }
-    return CupertinoPageScaffold(
-      child: content,
+    return Scaffold(
+      body: new RefreshIndicator(
+        child: content,
+        onRefresh: _getBookData,
+      ),
     );
   }
 
@@ -134,19 +135,52 @@ class _RecommendPageState extends State<RecommendPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Flexible(
+          Expanded(
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: <BoxShadow>[
                   BoxShadow(color: StudentColors.s_9a9a9a, blurRadius: 0.1)
                 ],
               ),
-              child: Image.network(
-                bookLists.data.bookListVoArr[index].coverUrl,
-                fit: BoxFit.fill,
+              child: PhotoHero(
+                photo: bookLists.data.bookListVoArr[index].coverUrl,
                 width: 103.0,
                 height: 137.0,
+                onTap: () {
+                  Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (BuildContext context) {
+                      return new BookDetailPage(
+                          ids: bookLists.data.bookListVoArr[index].id,
+                          url: bookLists.data.bookListVoArr[index].coverUrl);
+                    }),
+                  );
+                },
               ),
+//              CachedNetworkImage(
+//                imageUrl: bookLists.data.bookListVoArr[index].coverUrl,
+//                placeholder: Image.asset(R.imagesCcBookNoPng),
+//                width: 103.0,
+//                height: 137.0,
+//                fit: BoxFit.fill,
+//              ),
+//              Stack(
+//                children: <Widget>[
+//                  Image.asset(
+//                    R.imagesCcBookNoPng,
+//                    filterQuality: FilterQuality.high,
+//                    fit: BoxFit.fill,
+//                    width: 103.0,
+//                    height: 137.0,
+//                  ),
+//                  Image.network(
+//                    bookLists.data.bookListVoArr[index].coverUrl,
+//                    filterQuality: FilterQuality.high,
+//                    fit: BoxFit.fill,
+//                    width: 103.0,
+//                    height: 137.0,
+//                  ),
+//                ],
+//              ),
             ),
           ),
           Container(

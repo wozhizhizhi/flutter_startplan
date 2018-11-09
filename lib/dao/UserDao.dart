@@ -13,6 +13,7 @@ import 'dart:convert';
 import 'package:flutter_starforparents/modle/BookListVos.dart';
 import 'dart:io';
 
+/// 网络管理类
 class UserDao {
   /// 发起登录网络请求
   /// [username] 登录名

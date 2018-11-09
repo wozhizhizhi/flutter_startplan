@@ -24,28 +24,34 @@ class _BooksPageState extends State<BooksPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MyTabViewWidget(
-      titles: title,
-      bgBarColor: StudentColors.s_22b2e1,
-      pageController: _pageController,
-      onPageChanged: pageChanged,
-      backgroundColor: getBgColor(0),
-      twoBackgroundColor: getBgColor(1),
-      borderColor: Colors.white,
-      oneSelectTextColor: getSelectColor(0),
-      twoSelectTextColor: getSelectColor(1),
-      pages: <Widget>[
-        new RecommendPage(),
-        new ClassificationPage(),
-      ],
-      onTapOne: (){
-        _index = 0;
-        _pageController.animateToPage(_index, duration: new Duration(milliseconds: 300), curve: Curves.easeOut);
-      },
-      onTapTwo: (){
-        _index = 1;
-        _pageController.animateToPage(_index, duration: new Duration(milliseconds: 300), curve: Curves.easeOut);
-      },
+    return new DefaultTabController(
+      initialIndex: _index,
+      length: title.length,
+      child: MyTabViewWidget(
+        titles: title,
+        bgBarColor: StudentColors.s_22b2e1,
+        pageController: _pageController,
+        onPageChanged: pageChanged,
+        backgroundColor: getBgColor(0),
+        twoBackgroundColor: getBgColor(1),
+        borderColor: Colors.white,
+        oneSelectTextColor: getSelectColor(0),
+        twoSelectTextColor: getSelectColor(1),
+        pages: <Widget>[
+          new RecommendPage(),
+          new ClassificationPage(),
+        ],
+        onTapOne: () {
+          _index = 0;
+          _pageController.animateToPage(_index,
+              duration: new Duration(milliseconds: 300), curve: Curves.easeOut);
+        },
+        onTapTwo: () {
+          _index = 1;
+          _pageController.animateToPage(_index,
+              duration: new Duration(milliseconds: 300), curve: Curves.easeOut);
+        },
+      ),
     );
   }
 

@@ -5,6 +5,8 @@ import 'package:flutter_starforparents/main/UserPage.dart';
 import 'package:flutter_starforparents/util/StudentColors.dart';
 import 'package:flutter_starforparents/main/GuidePage.dart';
 import 'package:flutter_starforparents/r.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 /// 应用的首页面
 class HomePage extends StatefulWidget {
@@ -17,6 +19,9 @@ class _HomePageState extends State<HomePage> {
   int _curIndex = 0;
   var _tabImages;
   var _body;
+
+  /// 退出应用的时间
+  int _lastClickTime = 0;
 
   /// 未选中的文字效果
   final textTabStyleNormal =
@@ -95,24 +100,37 @@ class _HomePageState extends State<HomePage> {
     /// 初始化图片
     _initImage();
     _initPage();
-    return new Scaffold(
-      body: _body,
-      bottomNavigationBar: CupertinoTabBar(
-        items: <BottomNavigationBarItem>[
-          new BottomNavigationBarItem(
-              icon: setIndexImage(0), title: setText(0)),
-          new BottomNavigationBarItem(
-              icon: setIndexImage(1), title: setText(1)),
-          new BottomNavigationBarItem(
-              icon: setIndexImage(2), title: setText(2)),
-        ],
-        currentIndex: _curIndex,
-        onTap: (index) {
-          setState(() {
-            _curIndex = index;
-          });
-        },
-      ),
-    );
+    return WillPopScope(
+        child: new Scaffold(
+          body: _body,
+          bottomNavigationBar: CupertinoTabBar(
+            items: <BottomNavigationBarItem>[
+              new BottomNavigationBarItem(
+                  icon: setIndexImage(0), title: setText(0)),
+              new BottomNavigationBarItem(
+                  icon: setIndexImage(1), title: setText(1)),
+              new BottomNavigationBarItem(
+                  icon: setIndexImage(2), title: setText(2)),
+            ],
+            currentIndex: _curIndex,
+            onTap: (index) {
+              setState(() {
+                _curIndex = index;
+              });
+            },
+          ),
+        ),
+        onWillPop: _doExitApp);
+  }
+
+  Future<bool> _doExitApp() {
+    int nowTime = new DateTime.now().millisecondsSinceEpoch;
+    if (_lastClickTime != 0 && nowTime - _lastClickTime < 1500) {
+      return Future.value(true);
+    } else {
+      Fluttertoast.showToast(msg: "再按一次退出应用", gravity: ToastGravity.CENTER);
+      _lastClickTime = new DateTime.now().millisecondsSinceEpoch;
+      return Future.value(false);
+    }
   }
 }
