@@ -8,6 +8,7 @@ import 'package:flutter_starforparents/pages/Splash.dart';
 import 'package:flutter_starforparents/pages/LoginPage.dart';
 import 'package:flutter_starforparents/pages/Registeredpage.dart';
 import 'package:flutter_starforparents/pages/SettingPage.dart';
+import 'package:flutter_starforparents/pages/PersonalMessageSetting.dart';
 
 void main() => runApp(new MyApp());
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/LoginPage': (BuildContext context) => new LoginPage(),
         '/RegisteredPage': (BuildContext context) => new RegisteredPage(),
         '/SettingPage': (BuildContext context) => new SettingPage(),
+        '/PersonalMessageSetting': (BuildContext context) => new PersonalMessageSetting(),
       },
       home: new Splash(),
     );

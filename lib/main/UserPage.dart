@@ -38,7 +38,7 @@ class _UserPageState extends State<UserPage> {
                   ),onTap: (){
                    Navigator.pushNamed(context, "/SettingPage");
                  },),
-                  Stack(
+                  InkWell(child: Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
                       new Container(
@@ -64,7 +64,9 @@ class _UserPageState extends State<UserPage> {
                         alignment: Alignment.bottomRight,
                       ),
                     ],
-                  ),
+                  ),onTap: (){
+                    Navigator.pushNamed(context, "/PersonalMessageSetting");
+                  },),
                   Container(
                     margin: const EdgeInsets.only(top: 13.0),
                     child: Text(

@@ -9,6 +9,7 @@ import 'package:flutter_starforparents/widgets/commonloading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_starforparents/widgets/PhotoHero.dart';
 import 'package:flutter_starforparents/pages/BookDetailPage.dart';
+import 'package:flutter_starforparents/util/PhoneSizeUtil.dart';
 
 /// 推荐页面
 class RecommendPage extends StatefulWidget {
@@ -39,11 +40,15 @@ class _RecommendPageState extends State<RecommendPage>
 
   @override
   Widget build(BuildContext context) {
+    /// 为什么我要在这里加一个GlobalKey，这个GlobalKey据我的理解就是可以用于修复视图，我起先没加之前跳转到详情页的时候
+    /// 会一直报错， '_elements.contains(element)': is not true，加上这个后就不报错误了，所以理解成了视图修复，其次
+    /// 为什么会报这个错误主要原因是debug的时候GlobalKey的值改变了,虽然没报错了但是每次回来会回到最初的位置
+    GlobalKey<_RecommendPageState> statePage = new GlobalKey<_RecommendPageState>();
     var content;
     if (bookLists == null) {
       content = new CommonLoading();
     } else {
-      content = Container(child: CustomScrollView(
+      content = Container(key: statePage,child: CustomScrollView(
         slivers: <Widget>[
           SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -57,8 +62,8 @@ class _RecommendPageState extends State<RecommendPage>
             }, childCount: 1),
           ),
           SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: count,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: PhoneSizeUtil.getScreenWidth(context) / 3,
                 mainAxisSpacing: 8.0,
                 crossAxisSpacing: 5.0,
                 childAspectRatio: 0.59),
@@ -136,12 +141,12 @@ class _RecommendPageState extends State<RecommendPage>
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: StudentColors.s_9a9a9a, blurRadius: 0.1)
-                ],
-              ),
+            child: Card(
+//              decoration: BoxDecoration(
+//                boxShadow: <BoxShadow>[
+//                  BoxShadow(color: StudentColors.s_9a9a9a, blurRadius: 0.1)
+//                ],
+//              ),
               child: PhotoHero(
                 photo: bookLists.data.bookListVoArr[index].coverUrl,
                 width: 103.0,
