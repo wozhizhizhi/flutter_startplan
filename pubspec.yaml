@@ -29,6 +29,7 @@ dependencies:
   permission_handler: '^2.1.0'
   cached_network_image: ^0.5.0
   image_picker: ^0.4.10
+  flutter_cupertino_date_picker: ^0.1.0
   flutter_plugin:
     path: ../flutter_plugin #获取设备信息插件
 
