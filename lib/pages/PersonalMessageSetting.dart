@@ -5,6 +5,12 @@ import 'package:flutter_starforparents/util/PhoneSizeUtil.dart';
 import 'package:flutter_starforparents/r.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_starforparents/dao/UserDao.dart';
+import 'package:flutter_starforparents/modle/BaseModel.dart';
+import 'package:flutter_starforparents/modle/PictureUrlArr.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 
 class PersonalMessageSetting extends StatefulWidget {
   @override
@@ -13,6 +19,48 @@ class PersonalMessageSetting extends StatefulWidget {
 
 class _PersonalMessageSettingState extends State<PersonalMessageSetting> {
   String dateTime = "1995-08-05";
+  int _selectedColorIndex = 0;
+  FixedExtentScrollController scrollController;
+  List coolColorNames = ["男", "女"];
+  File _image;
+  BaseModel<PictureUrlArr> _pictureUrlArr;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollController =
+        FixedExtentScrollController(initialItem: _selectedColorIndex);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    scrollController?.dispose();
+    super.dispose();
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    _upLoadHeadData(image);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  /// 请求图书的列表逻辑
+  Future<void> _upLoadHeadData(File image) async {
+    print("pic: ${image.path}");
+    FormData formData = new FormData.from({ "pictureArr":[new UploadFileInfo(image, "pictureArr")]});
+//  List<String> list = [_image.toString()];
+
+    if (!mounted) return; //异步处理，防止报错
+    _pictureUrlArr = await UserDao.getUpLoadHeadImageData(formData);
+    setState(() {
+//      _image = _pictureUrlArr.data.pictureUrlArr[0];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +116,7 @@ class _PersonalMessageSettingState extends State<PersonalMessageSetting> {
                             fontSize: 15.0, color: StudentColors.s_484848),
                       ),
                     ),
-                    new Container(
+                   InkWell(child: new Container(
                       margin: const EdgeInsets.only(
                           top: 8.0, right: 22.0, bottom: 8.0),
                       decoration: new BoxDecoration(
@@ -77,9 +125,13 @@ class _PersonalMessageSettingState extends State<PersonalMessageSetting> {
                       width: 73.0,
                       height: 73.0,
                       child: new CircleAvatar(
-                        backgroundImage: new AssetImage(R.imagesHeaderPng),
+                        backgroundImage: _image == null
+                            ? AssetImage(R.imagesHeaderPng)
+                            : FileImage(_image),
                       ),
-                    ),
+                    ),onTap: (){
+                     getImage();
+                   },),
                   ],
                 ),
                 Container(
@@ -125,7 +177,7 @@ class _PersonalMessageSettingState extends State<PersonalMessageSetting> {
                 ),
 
                 /// 性别
-                InkWell(
+                GestureDetector(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -141,43 +193,33 @@ class _PersonalMessageSettingState extends State<PersonalMessageSetting> {
                       new Container(
                         margin: const EdgeInsets.only(right: 25.0),
                         child: Text(
-                          "女",
-                          style: TextStyle(
-                              fontSize: 15.0, color: StudentColors.s_484848),
+                          coolColorNames[_selectedColorIndex],
+                          style: const TextStyle(
+                              color: StudentColors.s_484848
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  onTap: () {
-                    showModalBottomSheet(
+                  onTap: () async {
+                    await showCupertinoModalPopup<void>(
                       context: context,
-                      builder: (context) {
-                        return SizedBox(
-                          child: CupertinoPicker(
-                            backgroundColor: Colors.white,
-                            itemExtent: 2,
-                            onSelectedItemChanged: (index) {},
-                            children: List.generate(2, (index) {
-                              return Container(
-                                height: 36.0,
-                                child: Column(children: <Widget>[
-                                  new Expanded(
-                                    child: Text(
-                                      index == 0?"男":"女",
-                                      style: TextStyle(
-                                          color: Color(0xFF000046),
-                                          fontSize: 15.0),
-                                      textAlign: TextAlign.center,
-                                      softWrap: false,
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                  ),
-                                ]),
+                      builder: (BuildContext context) {
+                        return _buildBottomPicker(
+                          CupertinoPicker(
+                            scrollController: scrollController,
+                            itemExtent: 36.0,
+                            backgroundColor: CupertinoColors.white,
+                            onSelectedItemChanged: (int index) {
+                              setState(() => _selectedColorIndex = index);
+                            },
+                            children: List<Widget>.generate(
+                                coolColorNames.length, (int index) {
+                              return Center(
+                                child: Text(coolColorNames[index]),
                               );
                             }),
                           ),
-                          width: PhoneSizeUtil.getScreenWidth(context),
-                          height: 200.0,
                         );
                       },
                     );
@@ -266,6 +308,59 @@ class _PersonalMessageSettingState extends State<PersonalMessageSetting> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMenu(List<Widget> children) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: CupertinoColors.white,
+        border: Border(
+          top: BorderSide(color: Color(0xFFBCBBC1), width: 0.0),
+          bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.0),
+        ),
+      ),
+      height: 44.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+              letterSpacing: -0.24,
+              fontSize: 17.0,
+              color: CupertinoColors.black,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: children,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomPicker(Widget picker) {
+    return Container(
+      height: 180.0,
+      padding: const EdgeInsets.only(top: 6.0),
+      color: CupertinoColors.white,
+      child: DefaultTextStyle(
+        style: const TextStyle(
+          color: CupertinoColors.black,
+          fontSize: 18.0,
+        ),
+        child: GestureDetector(
+          // Blocks taps from propagating to the modal sheet and popping.
+          onTap: () {},
+          child: SafeArea(
+            top: false,
+            child: picker,
+          ),
+        ),
       ),
     );
   }

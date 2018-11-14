@@ -12,4 +12,7 @@ class Address{
   /* 首页 */
   static String URL_HOMEPAGE = BASE_URL+"/app/un/homePage";
 
+
+  static String URL_HEAD_UPLOAD =   BASE_URL+"/app/system/uploadPicture";
+
 }

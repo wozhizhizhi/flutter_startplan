@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_starforparents/r.dart';
 import 'package:flutter_starforparents/net/HttpMannage.dart';
+import 'CupertinoPickerDemo.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -53,6 +54,10 @@ class _SplashState extends State<Splash> {
     String token = await HttpMannage.getToken();
     if (token != null && token.isNotEmpty){
       Navigator.pushReplacementNamed(context, "/HomePage");
+
+//    Navigator.push(context, MaterialPageRoute(builder: (context){
+//      return new CupertinoPickerDemo();
+//    }));
     }
     else{
       Navigator.pushReplacementNamed(context, "/LoginPage");

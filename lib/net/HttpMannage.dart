@@ -71,8 +71,6 @@ class HttpMannage {
       optins.headers = headers;
       optins.baseUrl = Address.BASE_URL;
       optins.connectTimeout = 15000;
-      optins.contentType =
-          ContentType.parse("application/x-www-form-urlencoded");
     } else {
       optins = new Options(method: "get");
       optins.headers = headers;

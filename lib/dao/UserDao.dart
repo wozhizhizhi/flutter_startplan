@@ -11,8 +11,8 @@ import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:flutter_starforparents/modle/BookListVos.dart';
+import 'package:flutter_starforparents/modle/PictureUrlArr.dart';
 import 'dart:io';
-
 /// 网络管理类
 class UserDao {
   /// 发起登录网络请求
@@ -29,7 +29,7 @@ class UserDao {
       "loginType":2,
     };
 
-    var res = await HttpMannage.netFetch(Address.URL_LOGIN, requestParams, null, new Options(method: "post"));
+    var res = await HttpMannage.netFetch(Address.URL_LOGIN, requestParams, null, new Options(method: "post",contentType:  ContentType.parse("application/x-www-form-urlencoded")));
     if (res.data["token"] != null&&res.data["token"] != ""){
       await LocalSharePreferences.saveString(Config.USER_NAME_KEY, username);
       await LocalSharePreferences.saveString(Config.PW_KEY, password);
@@ -74,5 +74,20 @@ class UserDao {
     statusMsg = res.data["statusMsg"];
     code = res.data["statusCode"];
     return new BaseModel(statusCode: code,statusMsg: statusMsg,data: bookListVos);
+  }
+
+  /// 上传头像数据
+  static Future<BaseModel<PictureUrlArr>> getUpLoadHeadImageData(FormData formData) async{
+    PictureUrlArr pictureUrlArr;
+    String statusMsg;
+    int code;
+    var res = await HttpMannage.netFetch(Address.URL_HEAD_UPLOAD, formData, null, new Options(method: "POST",contentType:  ContentType.json));
+
+    if (res != null && res.data != null){
+      pictureUrlArr = PictureUrlArr.fromJson(res.data);
+    }
+    statusMsg = res.data["statusMsg"];
+    code = res.data["statusCode"];
+    return new BaseModel(statusCode: code,statusMsg: statusMsg,data: pictureUrlArr);
   }
 }
